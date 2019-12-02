@@ -1,0 +1,641 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "1AllExamples"=.\1AllExamples.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name amptuDemo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name directMotionDemo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name functor
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gripperDemo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name joydriveActionModule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name joydriveThreaded
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name joydriveUserTask
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name simpleMod
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name simpleModule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name simpleUserTask
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name sonyPTZDemo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name teleop
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name wander
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name actionExample
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name clientHelloWorld
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name joydriveAction
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name joydriveActionMod
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name serverHelloWorld
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name twoRobotWander
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name mutex
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name actionGroup
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name demo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name dpptuDemo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name getAuxExample
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name sickAutoLogger
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name sickLogger
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name sickTeleop
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name sickWander
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name vcc4Demo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ipthru
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "AriaDLL"=..\src\AriaDLL.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "P2ArmSimple"=.\P2ArmSimple.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "actionExample"=.\actionExample.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "actionGroup"=.\actionGroup.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "amptuDemo"=.\amptuDemo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "clientHelloWorld"=.\clientHelloWorld.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "demo"=.\demo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "directMotionDemo"=.\directMotionDemo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "dpptuDemo"=.\dpptuDemo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "functor"=.\functor.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "getAuxExample"=.\getAuxExample.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "gripperDemo"=.\gripperDemo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "gyroDrive"=.\gyroDrive.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "gyroExample"=.\gyroExample.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "ipthru"=.\ipthru.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "joydriveAction"=.\joydriveAction.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "joydriveActionMod"=.\joydriveActionMod.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "joydriveActionModule"=.\joydriveActionModule.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "joydriveThreaded"=.\joydriveThreaded.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "joydriveUserTask"=.\joydriveUserTask.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "mutex"=.\mutex.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "netServerSimple"=.\netServerSimple.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "serverHelloWorld"=.\serverHelloWorld.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "sickAutoLogger"=.\sickAutoLogger.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "sickLogger"=.\sickLogger.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "sickTeleop"=.\sickTeleop.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "sickWander"=.\sickWander.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "simpleMod"=.\simpleMod.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "simpleModule"=.\simpleModule.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "simpleUserTask"=.\simpleUserTask.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "sonyPTZDemo"=.\sonyPTZDemo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "teleop"=.\teleop.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "twoRobotWander"=.\twoRobotWander.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "vcc4Demo"=.\vcc4Demo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "wander"=.\wander.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

@@ -1,0 +1,125 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "ArInertial"=".\ArInertial.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name autoDriverModule
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ISense_Mod
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name isenseTest
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ISIS_Mod
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name isisTest
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name updateBias
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "ISIS_Mod"=".\src\ISIS_Mod.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ISense_Mod"=".\src\ISense_Mod.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "autoDriverModule"=".\examples\autoDriverModule.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name ISense_Mod
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ISIS_Mod
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "isenseTest"=".\examples\isenseTest.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "isisTest"=".\examples\isisTest.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "updateBias"=".\examples\updateBias.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

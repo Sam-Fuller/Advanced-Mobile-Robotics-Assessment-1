@@ -1,0 +1,160 @@
+
+
+# Stage worldfile to simulate the ActivMedia software development office.
+# Give this file to MobileSim like this:
+#
+#  MobileSim -W AMROffice.world
+#
+# This file sets up some settings, includes the world file fragment
+# "AMROffice.map.inc" which was converted from an ActivMedia .map file,
+# includes "PioneerRobotModels.world.inc" which defines model types
+# for the various kinds of Pioneer robots, then it creates some actual
+# instances of those robots positioned throughout the map. It also creates
+# a few small square obstacles with different sensor-return properties, which
+# can be dragged around the map.
+
+
+
+# Simulation settings:
+resolution     0.02  # the size of a pixel in Stage's underlying raytrace model in meters
+interval_sim 100     # milliseconds per update step
+interval_real 100    # real-time milliseconds per update step
+
+
+# GUI settings:
+window( 
+  size [ 900.000 685.000 ] 
+  center [0 0] 
+  scale 0.017 
+
+  # Secret hint: Stage normally interprets the mouse buttons
+  # differently, but we can change them to be like MobileEyes.
+  # MobileSim does this when converting from an ActivMedia map.
+  mouse_button_pan 3
+  mouse_button_zoom 2
+
+  # If you want to turn off default sensor visualizations you can do that
+  # here too.  "ranger" is the sonar.
+  laser_data 1
+  ranger_data 1
+  position_data 0
+)
+
+
+# Define a model to represent our walls:
+include "AMROffice.map.inc"
+
+# defines some bases and accessories for Pioneer-like robots:
+include "PioneerRobotModels.world.inc"
+
+
+# Define some individual robots positioned inside the walls:
+
+p3dx
+(
+  color "red"
+  name "p3dx1"
+  pose [-0.1 -0 0]
+)
+
+
+p3dx
+(
+  color "blue"
+  pose [-3.4 -2.85 180]
+)
+
+
+patrolbot-sh
+(
+  color "grey"
+  pose [-7.3 -2.8 90]
+)
+
+model
+(
+  color "yellow"
+  size [0.2 0.2]
+  shape "circle"
+)
+
+
+
+# The Three Amigos.
+# Make them invisible to the laser (normally amigo models aren't, but
+# in real life they are lower than the P3DX's laser, so in this particular
+# world we can make them invisible to all lasers.)
+
+amigo
+(
+  color "red"
+  pose [-5.75 -3.5 -100]
+  laser_return 0
+)
+
+amigo
+(
+  color "red"
+  pose [-4.4 4 -10]
+  laser_return 0
+)
+
+amigo
+(
+  color "red"
+  pose [-4.3 2.8 110]
+  laser_return 0
+)
+
+
+# Define some random diamond-shaped obstacles with different properties.
+# They can be dragged around in the same way robot models can.
+
+define diamond model (
+  laser_return 1
+  polygons 1
+  polygon[0].points 4
+  polygon[0].point[0] [0 1]
+  polygon[0].point[1] [1 0]
+  polygon[0].point[2] [0 -1]
+  polygon[0].point[3] [-1 0]
+  size [0.25 0.25]
+)
+
+diamond ( 	
+  name "random_object_1" 
+  pose [-3.5 5.8 0]
+  color "orange"  
+
+  # Visible as a highly reflective object to the laser:
+  laser_return 3
+)
+
+diamond (
+  name "random_object_2"
+  pose [-3 5.8 0]
+  color "magenta"
+  # Visible as a highly reflective object to the laser:
+  laser_return 2
+)
+
+diamond ( 	
+  name "random_object_3" 
+  pose [-2.5 5.8 0]
+  color "green"  
+
+  # Visible as a normally reflective object to the laser:
+  laser_return 1
+)
+
+diamond ( 	
+  name "random_object_3" 
+  pose [-2 5.8 0]
+  color "white"  
+
+  # Invisible to the laser:
+  laser_return 0
+)
+
+
+

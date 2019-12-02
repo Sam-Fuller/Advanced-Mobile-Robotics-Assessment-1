@@ -1,0 +1,1250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+  <title>MobileSim, the Adept MobileRobots simulator</title>
+  <style type="text/css"> 
+    p, ul, dl, table { margin-left: 5%; margin-right: 5%; text-align: justify; } 
+    p#date { margin-left: 0; }
+    pre { border: 1px solid black; margin-left: 7%; margin-right: 7%; padding: 1%;
+          background-color: lightgrey; text-size: x-small; }
+    td { border: 1px solid black; padding: 5px; }
+  </style>
+</head>
+<body>
+
+<h1>MobileSim</h1>
+<h2>The Adept MobileRobots Simulator</h2>
+
+<ul>
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#started">Getting Started</a></li>
+  <li><a href="#notes">Notes</a></li>
+  <li><a href="#args">Command-line Arguments</a></li>
+  <li><a href="#modeldefs">Model Definitions</a></li>
+  <li><a href="#mapobjs">Map Objects</a></li>
+  <li><a href="#exitcodes">Exit Codes</a></li>
+  <li><a href="#proto">Robot Protocol Support</a></li>
+  <li><a href="#simcmds">Simulator-only Commands</a></li>
+</ul>
+
+
+<div align="center">
+<img src="screenshot.png" alt="screenshot of MobileSim with three robots" width="494" height="570" />
+</div>
+
+<a name="intro"></a>
+<h3>Introduction</h3>
+<p>
+MobileSim is software for simulating mobile robots and their environments,
+for debugging and experimentation with <a href="../Aria/docs/index.html">ARIA</a> 
+or other software that supports Adept MobileRobots platforms.
+</p>
+
+<p>
+MobileSim is based on the Stage library, created by the 
+<a href="http://playerstage.sourceforge.net">Player/Stage/Gazebo project</a>.
+Stage and MobileSim are free software, distributed under the terms of the GNU 
+General Public License: see the file <a href="LICENSE.txt">LICENSE.txt</a> for details.
+</p>
+
+<p>
+MobileSim converts a MobileRobots/ActivMedia map (a .map file, 
+created by Mapper3&trade;, Mapper3-Basic, or other means) to a Stage 
+environment, and places a simulated robot model in that 
+environment.  It then provides a simulated Pioneer control 
+connection accessible via a TCP port (similar to the real 
+Pioneer's serial port connection).  ARIA is able to connect
+to TCP ports instead of serial ports (ArSimpleConnector, for example,
+automatically tries TCP port 8101 before the serial port).
+</p>
+
+<p>
+MobileSim (powered by Stage) has the following features
+and device models. Device model parameters may be customized in a
+configuration file, or new models may be defined based on existing
+models.
+</p>
+ 
+<ul>
+  <li>Various models of MobileRobots/ActivMedia differential drive
+    mobile robot bases (Pioneer 3 DX and AT, PowerBot&trade;, AmigoBot&trade;,
+    PeopleBot&trade;, PatrolBot&reg;, Seekur&reg;, Pioneer 2, Pioneer 1).
+  </li>
+  <li>You can define custom models of differential drive or 
+    omnidirectional robots, laser and sonar, defined either as
+    a Stage model definition, or by loading an Aria parameter (.p)
+    file.
+  </li>
+  <li>Sonar range sensor model</li>
+  <li>Laser range sensor (SICK LMS-200) model</li>
+  <li>Robot odometry pose estimation (with cumulative error)</li>
+  <li>Multiple robots (good performance is possible on a fast computer with
+  more than 25 robots)</li>
+  <li>Evironment and obstacles are loaded from a
+  MobileRobots/ActivMedia/ARIA map file; use the same map with ARNL/SONARNL or
+  your own software.</li>
+  <li>Interactively move robots and obstacles (with customized map file, see below)</li>
+  <li>Objects (robots or obstactles) may be configured to be detectable
+    only by some sensors</li>
+  <li>Objects (robots or obstacles) may be set as "highly reflective"
+    for special detection by the laser range sensor</li>
+  <li>Save image "snapshot" of simulation or save a sequence of images
+    for making movies.</li>
+  <li>Map files may be reloaded at run time</li>
+  <li>Robots may be interactively repositioned through the GUI or by
+    a command from client software</li>
+  <li>Client software may send log messages to MobileSim. Log messages
+    are timestamped and displayed both the GUI and console or log file, with
+    optional HTML formatting.</li>
+  <li>Visualization options for sensors, robots and obstacles, such as
+    drawing robot "trails" to show history of motion, color, diagnostic
+    values/visualization, and visualizations for debugging the simulator
+    itself.</li>
+  <li>Configurable space and time resolutions.</li>
+  <li>Full source code included under the GPL for understanding 
+    the simulation implementation, customizing and improving it,
+    or even adapting MobileSim's ARIA communication protocol layer for
+    other simulators.</li>
+</ul>
+
+
+<a name="install"></a>
+<h3>Installation</h3>
+
+<p>
+To install MobileSim on Windows, run the executable self-installer.
+</p>
+
+<p>
+To install MobileSim from either the RPM or Debian (deb) package,
+use your system's appropriate installation tool (<code>rpm</code> on RedHat,
+SuSe, etc. and 
+<code>dpkg</code> or Synaptic ("Add downloaded packages") on Debian, Ubuntu,
+etc.).  The RPM was built on RedHat 7.3, and the Debian
+package was built on Debian 3.1 (sarge) for i386 (32-bit). MobileSim requires the GTK 2.0+
+libraries on RedHat, and GTK 2.6+ on Debian.  It also requires libstdc++ 2.2 for 
+libc6. (These libraries are standard parts of most Linux installations, but if 
+they are missing you may have to install packages which provide them).
+If you are running amd64 or ia64 Debian, try installing the
+<code>ia32-libs-gtk</code> and
+<code>ia32-libs</code> packages using <code>apt-get</code>, and then installing the MobileSim package with the
+<code>--force-architecture</code> option to <code>dpkg</code>.
+</p>
+
+<p>
+To build MobileSim from source code, obtain the "MobileSim-src" tar/gz archive
+from 
+<a href="http://robots.mobilerobots.com/MobileSim">http://robots.mobilerobots.com/MobileSim</a> 
+and follow the instructions in the README.src.text file found inside.
+</p>
+
+<a name="started"></a>
+<h3>How to get started</h3>
+
+<p>
+To simulate a robot you need a map file containing lines for walls. A map 
+file with lines can be created using a recent version of Mapper3 
+or Mapper3-Basic (See <a
+href="http://robots.mobilerobots.com">http://robots.mobilerobots.com</a>), or by other means.
+See the <a href="../Aria/docs/index.html">ARIA documentation</a> for the
+<code>ArMap</code> class for a full description of the format,
+or refer to <code>columbia.map</code> or <code>AMROffice.map</code>, distributed with MobileSim,
+for an example.
+</p>
+
+<p>
+MobileSim may be launched from the Start menu (Windows), or from the 
+Gnome or KDE menu (Linux), or from the command line (any platform).
+</p>
+
+<p>
+Run MobileSim from a command line prompt like this:
+</p>
+
+<pre>
+  MobileSim
+</pre>
+
+<p>
+or, to skip the initial dialog by specifying a map file and robot model
+to create on the command line:
+</p>
+
+<pre>
+  MobileSim -m <i>&lt;map file&gt;</i> -r <i>&lt;robot model&gt;</i>
+</pre>
+
+<p>
+For example:
+</p>
+
+<pre>
+  MobileSim -m columbia.map -r p3dx
+</pre>
+
+<p>
+The parameters are optional. The default robot model created, if -r is not
+given, is "p3dx".  Some additional robot models include "p3at", 
+"powerbot", "peoplebot", "patrolbot-sh", "seekur", and "amigo". 
+</p>
+
+<p>
+To create multiple simulated robots, use -r multiple times, naming 
+the robots after the model type, seperated by a colon, if you wish:
+</p>
+
+<pre>
+   MobileSim -m columbia.map -r p3dx:robot1 -r p3dx:robot2 -r amigo:robot3
+</pre>
+
+<p>
+If you are working with many robots, it can be inconvenient to create them
+all at MobileSim startup.  If you use -R instead of -r, then a new robot
+will be created on demand for each client that connects, and destroyed
+when the client exits. (So the robot's state is not preserved.)
+</p>
+
+<p>More command-line options are described below.</p>
+
+<p>
+If you run MobileSim with no command line options, or from the desktop menu, 
+you may select the map and one robot model from a dialog box.  Or, you may 
+choose to use no map (but note that in this case, the usable universe
+is limited to 200 x 200 meters -- gray area indicates the edge.)
+</p>
+
+<p>
+Example maps are included with MobileSim. On Linux, you can find these
+files by navigating from the root file system to
+<code>/usr/local/MobileSim</code>.
+On Windows, these maps are in <code>C:\Program
+Files\MobileRobots\MobileSim</code>.
+<code>columbia.map</code> included with MobileSim is equivalent to
+<code>columbia.map</code>
+included with ARNL.
+</p>
+
+<p>
+A window will appear, displaying your map environment and robot(s). The
+robot will start at a home position in your map, if present, or at the center
+of the map. The robot's body is drawn based on the aproximate length and 
+width -- including wheels -- of the model selected.  You can pan in 
+the window by holding down the right mouse button and dragging. You can zoom 
+with the mouse scroll wheel, or by holding down the middle mouse button and 
+dragging towards or away from the center of the circle that appears.   
+</p>
+
+<p>
+The robot may be moved by dragging it with the left mouse button and rotated by
+dragging it with the right mouse button. Note that this will update the robot's 
+true pose, but <em>not</em> its odometry -- it is like picking up the robot 
+off the ground and carrying it to a new location.
+</p>
+
+<p>
+You can turn on device visualizations using the View menu. Ranger or 
+Sonar: if a client program has connected and enabled the sonar, sonar 
+field centers will be drawn as grey lines. Laser: If a client program 
+has enabled the laser rangefinder, its range will be drawn as a light 
+blue field.  Position: Axes are drawn for the robot's odometry 
+coordinate system, and its true pose, odometric pose, and current 
+velocity are displayed.
+</p>
+
+<p>
+A snapshot or sequence of snapshots of the window can be saved as a 
+bitmap file to disk with the Export item in the File menu.
+</p>
+
+<p>
+The lower log message pane displays information and warning about what 
+the robots are doing (some commands will result in a log message, but 
+not all).  SIM_MESSAGE commands also display messages here.
+The statusbar pane below the log message pane displays, from left to right: 
+the total time since the simulator started; the ratio of real time per
+update step and simulation time, indicating how close to real-time (1.0) the
+simulation is running; the total number of "subscriptions" in the simulation
+(one per each robot plus one per each device being accessed); and the MobileSim 
+and stage version numbers.
+</p>
+
+
+<p>
+Once running, a program can connect to the simulator
+via TCP port 8101, and use the same protocol on that TCP port as it does with
+a real robot over its serial port link.  Any ARIA-based program that uses 
+ArSimpleConnector or ArTcpConnection will do this automatically. You can 
+specify an alternate port number with the -p option.   If multiple robots were 
+requested with multiple -r options, each additional robot will use the next 
+port number (i.e. 8102, 8103, etc.). For these additional robots, you will
+have to specify the port number when running its ARIA program, usually using
+the -rrtp (-remoteRobotTcpPort) command-line option.
+</p>
+
+<p>
+A tool called <code>convertSfWorldToMap</code> is available in ARIA's collection of 
+utility and example programs to convert a Saphira .wld file to a .map, as well as a 
+tool called <code>addSfWorldLinesToMap</code> for importing lines into a .map
+from a .wld.  The MobileSim source code also contains a simple command
+line tool that attempts to convert a PNM bitmap to a .map file.
+</p>
+
+
+<p>Run MobileSim on the command line with the --help option for a full list
+of options.
+</p>
+
+<a name="notes"></a>
+<h3>Notes and Future Plans</h3>
+
+<p>
+The goal of Stage and MobileSim are to provide an efficient and sufficient
+simulation of multiple robots. While we have modified Stage to add some
+features and additional behavior (such as basic sensor noise), the simulation remains
+simplified.
+Don't forget to test your code on a real robot.
+</p>
+
+<p>
+<i>
+"All models are wrong. Some are useful." --George E. P. Box
+</i>
+</p>
+
+<p>
+However, since the full source code for MobileSim and Stage are
+available (in the "MobileSim-src" package available from
+<a href="http://robots.mobilerobots.com/MobileSim">the web</a>), 
+it is always possible to add new models or modify existing
+models to simulate any particular properties you need.  Stage is
+not hard to understand and modify.  If you need any help, ask
+on the aria-users mailing list, or the Player/Stage mailing list.
+If you do make any modifications that you think others would 
+find useful, you may post them to aria-users, or send them to
+support@mobilerobots.com.
+</p>
+
+<h4>A note about data communications channels</h4>
+
+<p>
+On a real robot, ARIA may be communicating with different devices over separate
+communications channels. For example, ARIA communicates with the robot
+microcontroller over one RS-232 serial port, with a SICK LMS-200 laser
+rangefinder over a different RS-232 serial port, simultaneously using two
+different threads (one contained in ArRobot, the other in ArLMS200 which is a
+subclass of ArThreadedRangeDevice).  Other additional devices may use additional
+parallel communications channels such as serial, USB and ethernet connections.  
+</p>
+
+<p>
+However, ARIA communicates with MobileSim over only one TCP socket connection.
+Therefore all communications with both the simulated robot and simulated devices
+must occur on this one channel, the same as the robot connection (ARIA's Connector classes detect MobileSim and
+use the appropriate code to handle data transfer with devices via the robot
+connection).   Be aware of this when structuring programs; for example, laser
+data will not be received unless the ArRobot connection is active and running
+(using either <code>ArRobot::runAsync()</code> or <code>ArRobot::run()</code>).
+</p>
+
+
+<h4>Additional notes:</h4>
+
+<ul>
+  <li>See below for details on supported commands and specific known problems 
+      with the ARCOS/AROS/P2OS command emulation.
+  </li>
+
+  <li>Sonar reflection is not modeled</li>
+
+  <li>Several devices are not available yet, including grippers, arms, 
+      general pan-tilt units, IR sensors, bumpers, analog or digital 
+      I/O ports, GPS units, or video cameras.
+  </li>
+
+  <li>MobileSim is graphics intensive and will compete with e.g. MobileEyes for graphics 
+  resources. Graphics display is not fully optimized yet.
+  </li>
+
+  <li>While it is possible to make the simulation run faster (or much slower)
+  than near "real time", it is not well tested how this affects clients. 
+  Many clients (including those using ARIA) have timeout limits based on
+  the real system time (it is possible to configure most of ARIA's timeout
+  limits, though. See reference documentation or ask the aria-users group).  
+  Clients also may not be able to process packets fast
+  enough if the simulation runs much faster than real time, resulting in buffering of data and possibly loss of data.
+  </li>
+
+</ul>
+
+<p>
+Future plans for include better sonar model, simulating additional
+devices, and various user interface features for creating new simulated 
+robots, loading maps, and tweaking their properties.  If you have any 
+requests or would like to help add features, please join the discussion 
+on the aria-users mailing list.  
+</p>
+
+
+<a name="advanced"></a>
+<h3>Advanced Usage</h3>
+
+<a name="args"></a>
+<h4>Command-line Arguments</h4>
+
+<p>
+A full listing of MobileSim's command line parameters follows:
+</p>
+
+<p>
+Usage: 
+<pre>
+MobileSim [-m <i>map</i>] [-r <i>robot model</i> ...] [...options...]
+</pre>
+</p>
+
+<table>
+<tr><td><code>--map <i>map</i></code></td><td>Load map file (e.g. created with Mapper3)</td></tr>
+<tr><td><code>-m <i>map</i></code></td><td>Same as <code>-map <i>map</i></code>.</td></tr>
+<tr><td><code>--nomap</code></td><td>Create an "empty" map to start with. Same as -map "".
+                       Ignored if -m is also given.</td></tr>
+<tr><td><code>--robot <i>model</i><i>[</i>:<i>name</i><i>]</i></code></td>
+                       <td>Create a simulated robot of the given model.
+                       If an ARIA robot parameter file is given for <i>model</i>,
+                       then MobileSim attempts to load that file from the
+                       current working directory, and create an equivalent model definition.
+                       May be repeated with different names and models to create
+                       multiple simulated robots. Name portion is optional.
+                       For example:
+                       <pre>--robot p3dx --robot amigo:MyRobot -r
+                       custom.p:CustomBot</pre>
+                       See PioneerRobotModels.world.inc for model definitions.</td></tr>
+
+<tr><td><code>-r <i>model</i></code><i>[</i><code>:<i>name</i></code><i>]</i></td><td>Same as
+<code>--robot <i>model</i></code><i>[</i><code>:<i>name</i></code><i>]</i>.</td></tr>
+
+<tr><td><code>--robot-factory <i>model</i></code></td><td>
+                       Instead of creating one robot of the given model, accept any
+                       number of client programs on its port, creating a new instance of
+                       the model for each client, and destroying it when the client
+                       disconnects.</td></tr>
+
+<tr><td><code>-R <i>model</i></code></td><td>Same as
+<code>--robot-factory <i>model</i></code></td></tr>
+
+<tr><td><code>-p <i>port</i></code></td><td>Emulate Pioneer connections starting
+with  TCP port <i>port</i> (Default: 8101)</td></tr>
+
+<tr><td><code>-W <i>worldfile</i></code></td><td>Use Stage worldfile
+<i>worldfile</i> instead of map, and instead of standard world configuration files.</td></tr>
+<tr><td><code>--stageworld</code></td><td>Same as -W.</td></tr>
+<tr><td><code>--fullscreen-gui</code></td><td>Display window in fullscreen mode.</td></tr>
+<tr><td><code>--maximize-gui</code></td><td>Display window maximized.</td></tr>
+<tr><td><code>--minimize-gui</code></td><td>Display window minimized (iconified)</td></tr>
+<tr><td><code>--noninteractive</code></td><td>Don't display any interactive dialog boxes that might
+                       block program execution. Also restart MobileSim if it
+                       crashes (Linux only).</td></tr>
+<tr><td><code>--lite-graphics</code></td><td>Disable some graphics for slightly better performance</td></tr>
+<tr><td><code>--no-graphics</code></td><td>Disable all graphics drawing for slightly better performance</td></tr>
+<tr><td><code>--html</code></td><td>Print log messages and other output in HTML rather than plain text</td></tr>
+<tr><td><code>--cwd <i>dir</i></code></td><td>Change directory to <i>dir</i> at startup.  Client programs can then load maps relative to this directory.</td></tr>
+<tr><td><code>--log-file <i>file</i></code></td><td>Print log messages to
+<i>file</i> instead of standard error console.</td></tr>
+<tr><td><code>-l <i>file</i></code></td><td>Same as --log-file <i>file</i>.</td></tr>
+<tr><td><code>--log-file-max-size <i>size</i></code></td>
+<td>
+  If the amoount of data written to the log file exceeds <i>size</i>
+bytes, then rotate the log files (up to 5) and open a new log file.
+This option keeps the total size of all the log files under <i>size</i>*5 bytes.
+If --noninteractive is given, the default for <i>size</i> is 5 MB. Otherwise,
+the default is not to limit the size of the log file at all.
+</td>
+</tr>
+<tr><td><code>--update-interval <i>ms</i></code></td><td>
+                       Time between each simulation update step.  (Default is 100 ms.
+                       less may improve simulation performance but impact client responsiveness
+                       and data update.)</td></tr>
+<tr><td><code>--update-sim-time <i>ms</i></code></td><td>
+                       How much simulated time each simulation update takes
+                       (Default is equal to update-intenval. More than update-interval results in
+                       faster-than-realtime simulation, which may cause problems
+                       for clients)</td></tr>
+<tr><td><code>--start <i>x</i>,<i>y</i>,<i>th</i></code> OR <code>--start
+outside</code> OR <code>--start random</code></td><td>
+                       Use <i>x</i>, <i>y</i>, <i>th</i> as robot starting point (even if the map has
+                       Home objects). Or, use the keyword "outside"
+                       to cause robots to start 2m outside the map bounds
+                       &mdash; it later must
+                       be moved within the map bounds to be used &mdash; or, use the keyword "random"
+                       to randomly choose a starting place within the map bounds.</td></tr>
+
+<tr><td><code>--resolution</code> <i>r</i></td>  
+    
+    <td>Use resolution <i>r</i> (milimeters) for collisions and sensors. Default
+    is 20mm (2cm)</td></tr>
+
+<tr><td><code>--ignore-command</code> <i>num</i></td>
+<td>
+Ignore the command whose number is given. Refer to robot manual and MobileSim
+documentation for command numbers. 
+For example, to prevent client programs from moving the robot's true position
+with the SIM_SET_POSE command, number 224, use <code>--ignore-command 224</code>.
+May be repeated. Warning, MobileSim and/or your
+program may not function correctly if some critical commands are ignored.
+</td>
+</tr>
+
+<tr><td><code>--less-verbose</code> </td>
+<td>
+Be a bit less verbose about logging messages, especially things that might be
+frequently logged (such as unsupported commands), to avoid filling up log files
+with useless info.
+</td>
+</tr>
+
+<tr>
+<td><code>--log-timing-stats</code></td>
+<td>
+Log some simulation timing information every 30 seconds.
+</td>
+</tr>
+
+<tr>
+<td><code>--bind-to-address</code> <i>address</i></td>
+<td>
+Only listen on the network interface with IP address <i>address</i> for new
+client connections (default is to listen on all addresses). This lets you run
+more than one MobileSim process on the same TCP ports on a machine that has more 
+than one network interface.
+</td>
+</tr>
+
+<tr>
+<td><code>--disable-crash-handler</code></td>
+<td>
+Disable the GDB crash handler (and just abort program on fatal signals). No
+effect on Windows, where there is no crash handler.
+</td>
+</tr>
+
+</table>
+
+
+<p>Windows' command shell unfortunately does not display the
+standard console output of GUI programs like MobileSim. To see MobileSim's output, you can either use the --log-file
+option, or run MobileSim from another command shell, such as the <a
+href="http://www.mingw.org">MSYS</a> shell
+(<a href="http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=82721&release_id=158803">download
+MSYS here</a>).
+</p>
+
+<a name="modeldefs"></a>
+<h4>Model Definitions</h4>
+
+<p>
+The standard Pioneer robot model definitions are in the file
+<code>PioneerRobotModels.world.inc</code>, which is installed with MobileSim
+(by default, in <code>/usr/local/MobileSim</code> on Linux and <code>C:\Program
+Files\MobileRobots\MobileSim</code> on Windows).  This file is used to create the desired
+robot model when loading a MobileRobots/ActivMedia .map file, and you may include
+it in your custom Stage worlds as well.  It must be present to run MobileSim. To define modified or custom 
+robot model definitions, either modify this file, or create one of these
+directories:
+</p>
+
+<ul>
+  <li><code>~/.MobileSim/include/</code> if on Linux (where ~ is your home directory), or</li>
+  <li><code>C:\Documents and Settings\<i>&lt;Your User Name&gt;</i>\MobileSim\include</code> on Windows
+(Where <i>&lt;Your User Name&gt;</i> is your user account name.</li>
+</ul>
+
+<p>
+Any files MobileSim
+finds in this include directory (except files that begin with a dot ".") 
+are included into the world configuration after PioneerRobotModels.world.inc. 
+(You can also put Stage world and GUI settings, and even model instantiations 
+into these files as well. See the 
+<a href="http://playerstage.sourceforge.net/doc/stage-2.0.0/group__model.html">
+Stage documentation 
+</a>
+for complete documentation of the syntax of these files.)
+New model definitions from these files can be used with the -r option on the command line using the model
+definition name, or by typing the name into the Robot Model field
+of MobileSim's initial dialog box.
+</p>
+
+<p>
+When you define a new model, you can change the
+<code>pioneer_robot_subtype</code>
+property; 
+this is the robot subtype string that ARIA uses 
+to load client-side parameters for the robot. If you do change this value,
+you must also create a parameter file (.p file) for that new type in ARIA's 'params' directory.
+</p>
+
+<p>
+MobileSim expects common resources like the
+<code>PioneerRobotModels.world.inc</code> file to
+be in the standard installation location (<code>/usr/local/MobileSim</code> on Linux;
+<code>C:\Program Files\MobileRobots\MobileSim</code> on Windows) unless an
+environment
+variable named <code>MOBILESIM</code> is set, or on Windows, in the 
+<code>\SOFTWARE\MobileRobots\MobileSim\Install Directory</code> registry key.
+Change these if you want MobileSim
+to use resources in a different directory than the standard installation
+location.
+</p>
+
+<h5>Robot speed limits</h5>
+
+<p>
+Model definitions for robots ("position" models) have speed limits defined. 
+This is analogous to the limits set in a real robot's firmware.
+</p>
+
+<a name="modeldefs"></a>
+<h4>Stage Worldfile Override</h4>
+
+<p>
+Instead of using a map file and the model definitions in
+<code>PioneerRobotModels.world.inc</code> and the files in
+<code>~/.MobileSim/include</code>, you may also simply provide a Stage-format 
+world file with the -W or -stageworld command 
+line options.   If provided, MobileSim uses only this world file for world
+configuration, it does not use the common
+<code>PioneerRobotModels.world.inc</code>,
+<em>or</em>
+the files in your "include" directory. 
+</p>
+
+<a name="mapobjs"></a>
+<h4>Special Simulator Map Objects</h4>
+
+
+<p>
+MobileSim includes some "box" model definitions in its model definitions file
+<code>PioneerRobotModels.world.inc</code>. These are 0.5 x 0.5 meter objects that
+you can place anywhere in the map, and move with the mouse during the
+simulation. These boxes are created in the same way as robots, using the
+<code>-r</code> command line argument. Use the <code>--start</code> option to
+choose their locations. You can <a href="#modeldefs">create your own model
+definitions</a> based on the
+<code>box</code> model type as well (e.g. with different dimensions, color,
+etc.)
+MobileSim's predefined <code>box</code> model types are described below:
+</p>
+
+<dl>
+  <dt><code>box</code>
+    <dd>A 0.5 x 0.5 m yellow box that is an obstacle which can also be sensed by laser and sonar.</dd>
+  <dt><code>box-nolaser</code>
+    <dd>A 0.5 x 0.5 m yellow box that is an obstacle which can be sensed by sonar, but <em>not</em> lasers.</dd>
+  <dt><code>box-nolaser-nosonar</code>
+    <dd>A 0.5 x 0.5 m yellow box that is an obstacle which can <em>not</em> be sensed by sonar or lasers (the robot will collide with it and trigger bumpers and stall).</dd>
+  <dt><code>box-reflector</code>
+    <dd>A 0.5 x 0.5 m yellow box that is an obstacle which can be sensed by sonar, and
+by laser with a high reflectance value (2).</dd>
+</dl>
+
+<p>
+For example, you can create a simulation with two movable boxes and a Pioneer 3-DX robot with the
+following command:
+</p>
+<pre>
+MobileSim -r p3dx -r box -r box
+</pre>
+
+<p>
+You can also define custom map object types in a map file, which will allow you
+to add them to that map file using Mapper3. MobileSim
+recognizes some additional attributes of the custom types in order to create 
+extra objects in the simulation. 
+</p>
+
+
+<dl>
+  <dt><code>Sim.Obstacle=</code><i>yes|no</i></dt>   
+                    <dd>If this attribute is given to a <code>SectorType</code>,
+                    then MobileSim creates an extra movable box. (Not supported
+                    yet for <code>BoundaryType</code>)
+                    If the value is <code>yes</code>, then the object will
+                    be an obstacle that the robot will collide with. If
+                    <code>no</code>, then the robot will pass through it.
+                    This attribute controls whether a box is created or not, it
+must be given with either a yes or no value.
+                    </dd>
+
+  <dt><code>Sim.LaserReflect=</code><i>int</i></dt>
+                    <dd>If the
+                    <i>int</i> value is greater than 1, then it
+                    will be returned to the client with laser readings, if the 
+                    laser sensor model is able to detect it according to its
+                    rules for detecting reflectors.
+                    (See <code>Reflector</code> below).</dd>
+                    If 1, it will be detected as a normal object by the laser.
+                    If 0, it will not be detected by the laser at all.
+                    </dd>
+  <dt><code>Sim.SonarReflect=</code><i>yes|no</i></dt>
+                    <dd>If <code>yes</code>, then the object will be detected by 
+                    sonar. If <code>no</code>, then it will not be detected by
+                    sonar.</code></dd>
+  
+</dl>
+
+
+<p>MobileSim also recognizes the following predefined Cairn objects:
+<dl>
+  <dt><code>Reflector</code></dt>         
+                    <dd>This creates a line in the map that has a higher
+                    "reflectance" value than the normal LINES data. (Note, 
+                    ARIA version 2.5 or later is needed to be able to read the reflectance 
+                    value data from the simulater LRF). Both sides of the line
+                    will have high reflectance.</dd>
+</dl>
+
+<p>
+To add these custom object type definitions to a map file, first manually edit
+the map to define a custom type that has a simulator specific attribute.
+For example, the following defines five object types: 
+<ol><li>a normal box
+    <li>a highly reflective box
+    <li>an box that is invisible to laser and sonar but which the robot will
+collide with
+    <li>a box that is invisible to laser and sonar and which the robot will not
+collide with  (it is simply visible in the simulator, this is useful as a simple
+marker of a place in the map)
+    <li>a reflector line
+</ol>
+</p>
+
+<pre>
+MapInfo: SectorType Name=BoxObstacle Label=Sim_BoxObstacle Sim.Obstacle=yes
+MapInfo: SectorType Name=ReflectiveBoxObstacle Label=Sim_ReflectiveBoxObstacle Sim.Obstacle=yes Sim.LaserReflect=32
+MapInfo: SectorType Name=InvisibleBox Label=Sim_InvisibleBox Shape=Plain Sim.Obstacle=yes Sim.LaserReflect=0 Sim.SonarReflect=no
+MapInfo: SectorType Name=MarkerBox Label=Sim_MarkerBox Shape=Plain Sim.Obstacle=no Sim.LaserReflect=0 Sim.SonarReflect=no
+MapInfo: BoundaryType Name=Reflector Label=Reflector Desc=Reflector "Color0=0xFF00FF"
+</pre>
+
+<p>
+You can also add attributes such as <code>Shape</code>, <code>Desc</code>,
+<code>Color0</code> and <code>Color1</code>.  To include spaces in the
+<code>Desc</code> or
+<code>Label</code> attributes, surround the whole key=value part in quotes (e.g.
+<code>"Desc=Invisibel Box for Simulator"</code>).
+</p>
+
+<p>
+Once these definitions are added to a map file which is then loaded into 
+Mapper3, then Mapper3 makes them available: in the Boundary tools for 
+Reflector lines, and the Sector tools for boxes.  You can modify the Color 
+and Shape parameters if you would like them to be displayed differently in 
+Mapper3.  When instances of the objects are added with Mapper3 they are then
+added to the map file as "Cairn" map objects (similar to goals etc.).
+</p>
+
+<h4>Default Map File</h4>
+
+<p>
+If you find that you are often loading the same map file into MobileSim
+over and over again, you can save a step by copying that map file into
+<code>~/.MobileSim</code> (Linux) or <code>\Documents and Settings\<i>&lt;User
+Name&gt;</i>\MobileSim</code>
+(Windows) and naming it <code>init.map</code>.  If this map file exists, MobileSim
+will load this map at startup if no command-line option is given, rather
+than dislpaying the initial Load Map File dialog box.
+</p>
+
+<a name="exitcodes"></a>
+<h4>Exit Codes</h4>
+
+<p>
+The MobileSim process has the following exit codes:
+</p>
+
+<table>
+<tr>  <td>0</td>     <td>No error</td>  </tr>
+<tr>  <td>255 (-1)</td>    <td>Error in command line arguments</td>  </tr>
+<tr>  <td>254 (-2)</td>    <td>Error writing a temporary file on startup</td>  </tr>
+<tr>  <td>253 (-3)</td>    <td>Error loading a map file</td>  </tr>
+<tr>  <td>252 (-4)</td>    <td>Error initializing Stage</td>  </tr>
+<tr>  <td>250 (-6)</td>    <td>Error loading a robot parameters file (.p file) to
+define a robot model</td>  </tr>
+<tr>  <td>249 (-7)</td>    <td>Error initializing the Pioneer emulation
+thread</td></tr>
+<tr>  <td>248 (-8)</td>  <td>Error opening a TCP socket for a robot or factory</td>  </tr>
+<tr>  <td>236 (-20)</td>  <td>MobileSim crashed, but crash handler caught signal
+and logged information to log file.</td> </tr>
+</table>
+
+<p>
+Error codes may also be requested in the SIM_EXIT command by a client (use 
+positive error codes less than 127, to differentiate from possible MobileSim codes).
+</p>
+
+
+
+<a name="proto"></a>
+<h3>Robot Protocol Support</h3>
+
+<p>
+Currently the following parts of the ARCOS/AROS/P2OS/AmigOS/PSOS protocols are 
+supported. This covers all robot motion commands used by ARIA (including both
+direct motion requests and actions), and several other features.
+</p>
+
+<table>
+<tr>
+<th>Name</th>           <th>Command #</th> <th>Argument Type</th> <th>Description</th>
+</tr>
+
+<tr><td>PULSE</td>      <td>0</td>       <td>none</td>    <td>No-op (but reset watchdog timeout)</td></tr>
+<tr><td>OPEN</td>       <td>1</td>       <td>int</td>     <td>Start up standard devices and send SIP packets</td></tr>
+<tr><td>CLOSE</td>      <td>2</td>       <td>int</td>     <td>Stop standard devices</td></tr>
+<tr><td>ENABLE</td>     <td>4</td>       <td>uint</td>    <td>Enable (1) or disable (0) motors </td></tr>
+<tr><td>SONAR</td>      <td>28</td>      <td>uint</td>    <td>Disable (0) or
+re-enable (1) sonar (but using argument bits 1-4 to select particular arrays is not
+supported)</td></tr>
+<tr><td>CONFIG</td>     <td>18</td>      <td>int</td>     <td>Request a configuration packet</td></tr>
+<tr><td>STOP</td>       <td>29</td>      <td>int</td>     <td>Stops the robot from moving</td></tr>
+<tr><td>VEL</td>        <td>11</td>      <td>int</td>     <td>Set the translational velocity (mm/sec)</td></tr>
+<tr><td>ROTATE</td>     <td>9</td>       <td>int</td>     <td>Set rotational velocity, duplicate of RVEL (deg/sec)</td></tr>
+<tr><td>RVEL</td>       <td>21</td>      <td>int</td>     <td>Set rotational velocity, duplicate of ROTATE (deg/sec)</td></tr>
+<tr><td>VEL2</td>       <td>32</td>      <td>2bytes</td>  <td>Independent wheel velocities. High 8 bits are left wheel velocity, low 8 bits are right wheel velocity. </td></tr>
+<tr><td>HEAD</td>       <td>12</td>      <td>uint</td>    <td>Turn to absolute heading 0-359 (degrees)</td></tr>
+<tr><td>SETO</td>       <td>7</td>       <td>none</td>    <td>Resets robots odometry back to 0, 0, 0</td></tr>
+<tr><td>DHEAD</td>      <td>13</td>      <td>int</td>     <td>Turn relative to current heading (degrees)</td></tr>
+<tr><td>SETV</td>       <td>6</td>       <td>int</td>     <td>Sets maximum velocity and MOVE velocity (mm/sec)</td></tr>
+<tr><td>SETRV</td>      <td>10</td>      <td>int</td>     <td>Sets the maximum rotational and HEAD velocity (deg/sec)</td></tr>
+<tr><td>SETA</td>       <td>5</td>       <td>int</td>     <td>Sets forward translational acceleration or deceleration (mm/sec/sec)</td></tr>
+<tr><td>SETRA</td>      <td>23</td>      <td>int</td>     <td>Sets rotational accel(+) or decel(-) (deg/sec)</td></tr>
+<tr><td>MOVE</td>       <td>8</td>       <td>int</td>     <td>Translational move (mm)</td></tr>
+<tr><td>LATVEL</td>     <td>110</td>     <td>int</td>     <td>Set lateral velocity (on robots that support it, i.e. Seekur)</td></tr>
+<tr><td>LATACCEL</td>   <td>113</td>     <td>int</td>     <td>Set lateral
+acceleration or deceleration (on robots that support it, i.e. Seekur)</td></tr>
+<tr><td>BATTEST</td>    <td>250</td>     <td>int</td>     <td>Artificially set battery voltage, in decivolts (e.g. 105 for 10.5 volts)</td></tr>
+<tr><td>ESTOP/QSTOP</td><td>55</td>      <td>none</td>    <td>Stop with maximum deceleration.</td></tr>
+<tr><td>BUMPSTALL</td>  <td>44</td>      <td>int</td>     <td>Configure
+bumpstall behavior.</td></tr>
+<tr><td>TTY2</td>       <td>42</td>      <td>string</td>  <td>Log with string contents</tr>
+<tr><td>TTY4</td>       <td>60</td>      <td>string</td>  <td>Log with string contents</tr>
+<tr><td>RESET or MAINTAINENCE</td><td>253 or 255</td>    <td>none</td>
+<td>Abort MobileSim for debugging. If
+  running in noninteractive mode on Linux, restart program after logging some
+  debugging informamtion using gdb.</td>
+</table>
+
+<p>Argument types: int=16-bit signed integer; uint=16-bit unsigned integer;
+2bytes=pair of 8-bit bytes; int4=32-bit signed integer.</p>
+
+<a name="simcmds"></a>
+<h4>Simulator-only commands</h4>
+
+<p>
+For compatability with SRISim and old ARIA versions, equivalent commands 
+with deprecated ID numbers are also accepted, with a warning.
+</p>
+
+<p>
+MobileSim will always use the robot name "MobileSim".  It will also report
+an OS version number starting with "S." and the string "SIM"
+for serial number in the CONFIGpac packet, and respond to the SIM_STAT 
+command with a SIMSTATpac packet and the SIM_CTRL,6 command with a SIM_INFO 
+packet. You can use these values in client software
+to detect whether it is connected to MobileSim or not.
+</p>
+
+<table>
+<tr>
+<td>SIM_SET_POSE</td>           <td>224</td>    <td>int4,int4,int4</td>  
+<td>
+  Move robot to global pose in simulator (does not change odometry).
+  The parameters are 4-byte integers for X, Y and Theta. The packet's argument
+  type byte is ignored. Here is an example of how to send this command in ARIA,
+  where <code>robot</code> is an <code>ArRobot</code> object, and
+  <code>x</code>, <code>y</code> and <code>th</code> are <code>int</code>
+  variables containing desired position in milimeters and degrees:
+  <pre>
+    ArRobotPacket pkt;
+    pkt.setID(ArCommands::SIM_SET_POSE);
+    pkt.uByteToBuf(0); // argument type: ignored.
+    pkt.byte4ToBuf(x);
+    pkt.byte4ToBuf(y);
+    pkt.byte4ToBuf(th);
+    pkt.finalizePacket();
+    robot.getDeviceConnection()-&gt;write(pkt.getBuf(), pkt.getLength());
+  </pre>
+</td>
+</tr>
+
+<tr>
+<td>SIM_RESET</td>              <td>225</td>    <td>none</td>         
+<td>
+  Move robot to original starting position in simulator (e.g. Home point or
+  Dock) and reset odometry to 0,0,0.
+</td>
+</tr>
+
+<tr>
+<td>SIM_LRF_ENABLE</td>         <td>230</td>    <td>int</td>          
+<td>
+  <table class="inner">
+    <tr><td>1</td> <td>to enable simulated laser rangefinder in-band (data
+      packet ID=0x60). </td></tr>
+    <tr><td>2</td> <td>to enable simulated LRF with extended information (data
+      packet ID=0x61).</td></tr>
+    <tr><td>0</td> <td>to disable LRF.</td></tr>
+  </table>
+  See below for data packet formats.
+</td>
+</tr>
+
+<tr>
+<td>SIM_LRF_SET_FOV_START</td>  <td>231</td>    <td>int</td>         
+<td>
+  Set start angle of laser field of view
+</td>
+</tr>
+
+<tr>
+<td>SIM_LRF_SET_FOV_END</td>    <td>232</td>    <td>int</td>          
+<td>
+  Set end angle of laser field of view
+  Currently start and end must be symetrical around 0. ARIA always 
+  does this, but if you want configure it differently it won't work.
+</td>
+</tr>
+
+<tr>
+<td>SIM_LRF_SET_RES</td>         <td>233</td>    <td>int</td> 
+<td>
+  Set degree increment between each reading; with FOV, this number 
+  determines the number of readings in each sweep
+</td>
+</tr>
+
+<tr>
+<td>SIM_CTRL</td>                <td>236</td>    <td>int,...</td>
+<td>
+  Perform a simulator meta-operation. The initial 2-byte integer
+  indicates the operation. The rest of the packet is operation-specific:
+
+  <table class="inner">
+    <tr>
+      <td>1</td>   <td>Replace map</td>     
+      <td>
+        Remove existing map data and load a new map from the
+        file given as a length-prefixed string folowing the 
+        operation code. Note: If the path is not absolute,
+        it will be interpreted as relative to MobileSim's 
+        startup working directory, or the directory given
+        with the --cwd command-line argument.
+        For compatibility with Windows and other platforms with
+        case-insensitive file naming, the case of the file name
+        does not matter.
+        A SIM_MAP_CHANGED packet will be sent back to the client
+        when MobileSim is done loading the new map.
+      </td>
+    </tr>
+    <tr>
+        <td>2</td>   <td>Master replace map</td>
+        <td>
+          Similar to <code>1</code>, but once this command is received, future
+          control commands with operation 1 are ignored, only operation 2 is
+          accepted.  Use this when many clients are requesting different maps,
+          but you want one of them (or a seperate program) to instead have
+          control over which map is being used.
+        </td>
+    </tr>
+    <tr>
+        <td>3</td>  <td>Master map clear</td>
+        <td>
+          Disable master map mode if enabled by <code>2</code>
+        </cd>
+    </tr>
+    <tr>
+      <td>4</td>  <td>Rotate logs</td>
+      <td>
+        If logging to a file (--log-file command-line option given),
+        then close current log file, move old log files to backup
+        files (up to 5 are kept), and open a new log file.
+        Only implemented for Linux currently.
+      </td>
+    </tr>
+    <tr>
+      <td>5</td>  <td>Log detailed state</td>
+      <td>
+        Write detailed internal simulation state for this robot.
+        (For debugging, mainly.)
+      </td>
+    </tr>
+    <tr>
+      <td>6</td>   <td>Request SIMINFO packet</td>
+      <td>Request SIM_INFO packet (see below).</td>
+    </tr>
+  </table>
+</td>
+</tr>
+
+<tr>
+<td>SIM_STAT</td>                <td>237</td> <td>none, 1, 2 or 0</td>
+<td>
+  Request SIMSTAT packets (ID=0x62) to be returned. See below.
+  Argument: none or 1 to return one packet, 2 to return a packet before each
+  SIP, or 0 to stop sending.
+</td>
+</tr>
+
+<tr>
+<td>SIM_MESSAGE</td>             <td>238</td>    <td>byte,string...</td>
+<td>
+  Display the length-prefixed string in the messages window.
+</td>
+</tr>
+
+<tr>
+<td>SIM_EXIT</td>                <td>239</td>    <td>int</td>
+<td>
+  Exit the simulator with the given exit code. (use 0 to indicate "normal"
+  exit).
+</td>
+</tr>
+
+</table>
+
+
+<p>
+The normal simulator laser packet is as follows:
+</p>
+
+<table>
+	<tr><td>Packet ID</td>            <td>ubyte=0x60</td></tr>
+	<tr><td>Robot X</td>              <td>int   </td></tr>
+	<tr><td>Robot Y</td>              <td>int</td></tr>
+	<tr><td>Robot Theta</td>          <td>int</td></tr>
+	<tr><td>Total No. Readings</td>   <td>int</td></tr>
+  <tr><td>Current</td>              <td>int,  index of the first reading given in this packet</td></tr>
+	<tr><td>Packet Len.</td>          <td>int,  number of bytes of data that follow</td></tr>
+	<tr><td colspan="2">
+    For each reading:
+    <table class="inner">
+      <tr><td>Reading Range</td>      <td>int,   Range for reading </td></tr>
+    </table>
+	  ...
+  </td></tr>
+</table>
+
+<p>
+The extended simulator laser packet is as follows:
+</p>
+
+<table>
+	<tr><td>Packet ID</td>            <td>ubyte=0x61</td></tr>
+	<tr><td>Total No. Readings</td>   <td>int</td></tr>
+	<tr><td>Current</td>              <td>int,      Index of first reading given
+  in this packet</td></tr>
+	<tr><td>Packet Len.</td>          <td>int,      number of bytes of data that follow</td></tr>
+	<tr><td colspan="2">
+    For each reading:
+    <table class="inner">
+	    <tr><td>Range</td>              <td>int,      Range for reading #i</td></tr>
+	    <tr><td>Reflectance</td>        <td>ubyte,    Reflectance value, if supported</td></tr>
+	    <tr><td>Flags</td>              <td>2 bytes,  Reserved</td></tr>
+    </table>
+	   ...
+  </td></tr>
+	<tr><td>Laser Device Index</td>    <td>ubyte,    Reserved</td></tr>
+	<tr><td>Flags</td>                 <td>ubyte,    Reserved</td></tr>
+</table>
+
+<p>
+The SIMSTAT packet is as follows.
+New fields may be added in future versions.
+</p>
+
+<table>
+	<tr><td>Packet ID</td>            <td>ubyte=0x62 (98)</td></tr>
+  <tr><td>unused/reserved NULL byte</td>     <td>ubyte=0</td> <td>reserved/unused</td></tr>
+  <tr><td>unused/reserved NULL byte</td>     <td>ubyte=0</td> <td>reserved/unused</td></tr>
+	<tr><td>Flags</td>                <td>4ubyte</td>   <td>bit 0=have a map; bit 1=map has origin georeference (OriginLatLonAlt)</td></tr>
+	<tr><td>SimInterval</td>          <td>2ubyte</td>   <td>Configured simulated time one loop interval takes</td></tr>
+	<tr><td>RealInterval</td>         <td>2ubyte</td>   <td>Configured real time one loop interval should take</td></tr>
+	<tr><td>LastInterval</td>         <td>2ubyte</td>   <td>Real time the last loop interval was measured at</td></tr>
+	<tr><td>True X</td>          <td>4byte</td>    <td>Robot's "true" X position in the simulator</td></tr>
+	<tr><td>True Y</td>          <td>4byte</td>    <td>Robot's "true" Y position in the simulator</td></tr>
+	<tr><td>True Z</td>          <td>4byte</td>    <td>Robot's "true" Z position in the simulator</td></tr>
+	<tr><td>True Theta</td>      <td>4byte</td>    <td>Robot's "true" rotation on its vertical axis in the simulator</td></tr>
+  <tr><td>Geo X</td>                <td>4byte</td>    <td>Robot's latitude (degrees * 10^6). Only valid if map has origin georeference.</td> 
+  <tr><td>Geo Y</td>                <td>4byte</td>    <td>Robot's longitude (degrees * 10^6). Only valid if map has origin georeference.</td> 
+  <tr><td>Geo Z</td>                <td>4byte</td>    <td>Robot's altitude (cm). Only valid if map has origin georeference.</td> 
+</table>
+
+<p>
+Here is an example of a packet handler function for ARIA that extracts some data from the
+SIMSTAT packet. Wrap this function in an <code>ArFunctor</code> object and use
+<code>ArRobot::addPacketHandler()</code> to register it with an
+<code>ArRobot</code> object.
+
+<pre>
+bool handleSimStatPacket(ArRobotPacket* pkt)
+{
+   if(pkt-&gt;getID() != 0x62) return false; // SIMSTAT has id 0x62
+   printf("SIMSTAT pkt received:\n"    );
+   char a = pkt-&gt;bufToByte();  // unused byte
+   char b = pkt-&gt;bufToByte();  // unused byte
+   ArTypes::UByte4 flags = pkt-&gt;bufToUByte4();
+   printf("\tFlags=0x%x\n", flags);
+   int simint = pkt-&gt;bufToUByte2();
+   int realint = pkt-&gt;bufToUByte2();
+   int lastint = pkt-&gt;bufToUByte2();
+   printf("\tSimInterval=%d, RealInterval=%d, LastInterval=%d.\n", simint, realint, lastint);
+   int realX = pkt-&gt;bufToByte4();
+   int realY = pkt-&gt;bufToByte4();
+   int realZ = pkt-&gt;bufToByte4();
+   int realTh = pkt-&gt;bufToByte4();
+   printf("\tTrue Pose = (%d, %d, %d, %d)\n", realX, realY, realZ, realTh);
+   if(flags &amp; ArUtil::BIT1)
+   {
+      double lat = pkt-&gt;bufToByte4()/10e6;
+      double lon = pkt-&gt;bufToByte4()/10e6;
+      double alt = pkt-&gt;bufToByte4()/100;
+      printf("\tLatitude = %f deg., Longitude = %f deg., Altitude = %f m\n", lat, lon, alt);
+   }
+   else
+   {
+      puts("No geoposition.");
+   }
+   return true;
+}
+</pre>
+</p>
+
+<p>
+The SIMINFO packet is as follows.
+New fields may be added in future versions.
+</p>
+
+<table>
+  <tr><td>Packet ID</td>            <td>ubyte=0x63 (100)</td></tr>
+  <tr><td>Application name</td>     <td>NULL-terminated string</td> <td>Name of simulator</td></tr>
+  <tr><td>Application version</td>  <td>NULL-terminated string</td> <td>Version of simulator</td></tr>
+  <tr><td>Flags</td>                <td>4ubyte</td>   <td>Bit 0=Sim is
+interactive with user and has a GUI; Bit 1=Sim crashed last time but was
+automatically restarted.</td> </tr>
+	<tr><td>Num. Devices</td>         <td>4ubyte</td>   <td>Number of devices attached to the robot</td></tr>
+	<tr><td colspan="3">
+    For each device:
+    <table class="inner">
+      <tr><td>Device Name</td>      <td>string</td>    <td>Unique name for this device</td></tr>
+      <tr><td>Device Type</td>       <td>string</td>    <td>e.g. "laser"</td></tr>
+      <tr><td>Device Number</td>     <td>ubyte</td>     <td>To distinguish individual devices of the same type</td></tr>
+      <tr><td>Device Status</td>     <td>ubyte,ubyte,ubyte,ubyte</td>    <td>Device-dependent status code(s)</td></tr>
+    </table>
+    ...
+   </td></tr>
+</table>
+
+<p>
+The SIM_MAP_CHANGED packet is as follows. 
+New fields may be added in future versions.
+</p>
+
+<table>
+  <tr><td>Packet ID</td>            <td>ubyte=0x66 (102)</td></tr>
+  <tr><td>User</td>                 <td>ubyte. 1=Map was loaded by user command (e.g. via gui), 0=Map was loaded by client program SIM_CTRL command.</td></tr>
+  <tr><td>Loaded</td>               <td>ubyte. 1=A new map was really loaded.  0=Map was not reloaded because already loaded and file is unchanged since last load.</td></tr>
+  <tr><td>Filename</td>             <td>string. filename of map that was loaded.</td></tr>
+</table>
+ 
+<h4>Unsupported commands</h4>
+
+<p>The following commands are not supported, and will be ignored, with a warning
+message. Some are not applicable to the simulator (ENCODER) or pertain to devices that
+aren't implemented in the simulator yet (gripper, sounds).</p>
+
+<table>
+	<tr><td>ENCODER</td>    <td>19</td></tr>
+	<tr><td>POLLING</td>    <td>3</td></tr>
+	<tr><td>SAY</td>        <td>15</td></tr>
+	<tr><td>JOYINFO</td>    <td>17</td></tr>
+	<tr><td>DIGOUT</td>     <td>30</td></tr>
+	<tr><td>GRIPPER</td>    <td>33</td></tr>
+	<tr><td>ADSEL</td>      <td>35</td></tr>
+	<tr><td>GRIPPERVAL</td> <td>36</td></tr>
+	<tr><td>GRIPPERPACREQUEST</td> <td>37</td></tr>
+	<tr><td>IOREQUEST</td>  <td>40</td></tr>
+	<tr><td>PTUPOS</td>     <td>41</td></tr>
+	<tr><td>GETAUX</td>     <td>43</td></tr>
+	<tr><td>TCM2</td>       <td>45</td></tr>
+	<tr><td>JOYDRIVE</td>   <td>47</td></tr>
+	<tr><td>HOSTBAUD</td>   <td>50</td></tr>
+	<tr><td>AUX1BAUD</td>   <td>51</td></tr>
+	<tr><td>AUX2BAUD</td>   <td>52</td></tr>
+	<tr><td>GYRO</td>       <td>58</td></tr>
+	<tr><td>CALCOMP</td>    <td>65</td></tr>
+	<tr><td>TTY3</td>       <td>66</td></tr>
+	<tr><td>GETAUX2</td>    <td>67</td></tr>
+	<tr><td>SOUND</td>      <td>90</td></tr>
+	<tr><td>PLAYLIST</td>   <td>91</td></tr>
+	<tr><td>SOUNDTOG</td>   <td>92</td></tr>
+	<tr><td>OLD_LOADWORLD</td>  <td>63</td>      <td>string</td>  <td>Load a 2-D world file from worlds/  directory</td></tr>
+	<tr><td>OLD_LOADPARAM</td>  <td>61</td>      <td>string</td>  <td>Load a robot definition from params/ directory</td></tr>
+	<tr><td>OLD_STEP</td>       <td>64</td>      <td>int</td>     <td>Steps through client program/simulation</td></tr>
+</table>
+
+
+<p>
+The following commands will probably never be supported since they do nothing on
+modern robots or use is discouraged:
+</p>
+
+<table>
+	<tr><td>DROTATE</td>    <td>14</td></tr>
+	<tr><td>DCHEAD</td>     <td>22</td></tr>
+	<tr><td>KICK</td>       <td>34</td></tr>
+</table>
+
+<p>Old simulator laser commands:
+These commands are supported for compatability with the previous simulator
+and ARIA (but may be disabled with the --no-srisim-laser-compat option):</p>
+<table>
+	<tr><td>OLD_LRF_ENABLE</td> <td>35</td>     <td>int</td>      <td>Start/stop sending laser data in-band </td></tr>
+	<tr><td>OLD_LRF_PARMSTART</td> <td>36</td>   <td>int</td>     <td>Sets start angle 0-180 degrees; also disables laser;
+	                            with #37, determines "flipped" order of readings.</td></tr>
+	<tr><td>OLD_LRF_PARMEND</td> <td>37</td>     <td>int</td>     <td>Sets scan end angle; also disables laser;
+	                            with #36, determines "flipped" order of readings.</td></tr>
+	<tr><td>OLD_LRF_PARMINC</td> <td>38</td>     <td>int</td>     <td>Sets inter-sample angle (100ths of degree)</td></tr>
+</table>
+
+<p>Deprecated SRISim commands: These commands are normally disabled,
+but may be enabled with the --srisim-compat </p>
+
+<table>
+	<tr><td>OLD_END_SIM</td>    <td>62</td>      <td>none</td>    <td>Exit
+simulator (MobileSim exits completely). Note, this command is also used for
+another use on real robots and newer version of ARIA send it after connecting
+(so the simulator exits immediately).  You can enable the other SRISim
+compatability commands with <code>--srisim-compat</code>, but disable this command using
+<code>--ignore-command 62</code></td></tr>
+	<tr><td>OLD_SETORIGINX</td> <td>66</td>      <td>int</td>     <td>Set the robot's current true X, (Note, conflicts with TTY3 command)</td></tr>
+	<tr><td>OLD_SETORIGINY</td> <td>67</td>      <td>int</td>     <td>...Y</td></tr>
+	<tr><td>OLD_SETORIGINTH</td> <td>68</td>     <td>int</td>     <td>...Theta</td></tr>
+	<tr><td>OLD_RESET_TO_ORIGIN</td> <td>69</td> <td>none</td>    <td>Reset true X Y, TH to 0,0,0</td></tr>
+</table>
+
+<hr/>
+
+<p>
+Copyright (C) 2006, 2007, 2008, 2009, 2010 MobileRobots Inc.<br>
+Copyright (C) 2011, 2012 Adept Technology<br>
+All Rights Reserved.
+</p>
+
+<p>
+Patrolbot&reg; and Seekur&reg; are registered trademarks of Adept Technology 
+</p>
+
+</body>
+
+
+</html>
+

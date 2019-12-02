@@ -1,0 +1,101 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "ArNetworkingLib"=.\ArNetworking\src\ArNetworkingLib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Aria"=.\Aria.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name connectTest
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name functorTest
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name taskpoolTest
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name demo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name serverDemo
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "AriaDLL"=.\src\AriaDLL.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "demo"=.\examples\demo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AriaDLL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "serverDemo"=.\ArNetworking\examples\serverDemo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name ArNetworkingLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+
